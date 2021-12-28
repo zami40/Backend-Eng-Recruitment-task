@@ -1,0 +1,39 @@
+<h1>Mobile List</h1>
+<a href="{% url 'mobile-create' %}">Add Mobile</a>
+<br>
+
+<input type='text' name="search-area" id="search_input_field" value="{{search_input}}" >
+<input type='submit' value='Search' id="search">
+
+<table id="mobile-data">
+    <tr>
+        <th>Mobile Name</th>
+        <th></th>
+    </tr>
+    {% for mobile in mobiles %}
+    <tr>
+        <td>{{mobile.model_name}}</td>
+        <td><a href="{% url 'mobile' mobile.id %}">View</a></td>
+        <td><a href="{% url 'mobile-update' mobile.id %}">Update</a></td>
+        <td><a href="{% url 'mobile-delete' mobile.id %}">Delete</a></td>
+    </tr>
+    {% empty %}
+    <h3>No Mobiles in the list</h3>
+    {% endfor %}
+
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $("#search").click(function(){
+        var search_input = $("#search_input_field").val();
+        $.ajax({
+            url: "{% url 'mobile-search' %}", 
+            method: "get",
+            data: {"search": search_input},
+            success: function(result){
+                $("#mobile-data").html(result);
+            }
+        });
+    });
+
+</script>
